@@ -1,12 +1,14 @@
 import java.util.*;
 import java.io.*;
 
-class Program355
+class Unpacker
 {
+    private static final byte XOR_KEY = 5; // Decryption key
+
     public static void main(String arg[]) throws Exception
     {
         System.out.println("------------------------------------------------");
-        System.out.println("---------- Marvellous Packer Unpacker ----------");
+        System.out.println("---------- JD Packer Unpacker ----------");
         System.out.println("------------------------------------------------");
 
         byte Header[] = new byte[100];
@@ -16,13 +18,13 @@ class Program355
         int iRet = 0;
         int iCnt = 0;
 
-        System.out.println("Enter the name of packed file that you want to unpack : ");
+        System.out.println("Enter the name of packed file that you want to unpack: ");
         String PackedFile = sobj.nextLine();
 
         File fobj = new File(PackedFile);
         FileInputStream fiobj = new FileInputStream(fobj);
 
-        while((iRet = fiobj.read(Header,0,100)) > 0)
+        while ((iRet = fiobj.read(Header, 0, 100)) > 0)
         {
             String Hstr = new String(Header);
 
@@ -35,22 +37,27 @@ class Program355
             FileSize = Integer.parseInt(Tokens[1]);
 
             byte Buffer[] = new byte[FileSize];
-            fiobj.read(Buffer,0,FileSize);
+            fiobj.read(Buffer, 0, FileSize);
+
+            // XOR decryption
+            for (int i = 0; i < FileSize; i++)
+            {
+                Buffer[i] ^= XOR_KEY;
+            }
 
             FileOutputStream foobj = new FileOutputStream(NewFile);
-            foobj.write(Buffer,0,FileSize);
+            foobj.write(Buffer, 0, FileSize);
 
-            System.out.println(Tokens[0] + " unpacked succesfully");
+            System.out.println(Tokens[0] + " unpacked successfully");
 
             iCnt++;
         }
-            System.out.println("------------------------------------------------");
 
-            System.out.println("Unpacking activity completed..");
-            System.out.println("Total file unpacked succesfully : "+iCnt);
-
-            System.out.println("------------------------------------------------");
-            System.out.println("Thank you for using Marvellous Packer Unpacker");
-            System.out.println("------------------------------------------------");
+        System.out.println("------------------------------------------------");
+        System.out.println("Unpacking activity completed.");
+        System.out.println("Total files unpacked successfully: " + iCnt);
+        System.out.println("------------------------------------------------");
+        System.out.println("Thank you for using JD Packer Unpacker");
+        System.out.println("------------------------------------------------");
     }
 }

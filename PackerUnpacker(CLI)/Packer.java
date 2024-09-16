@@ -1,12 +1,14 @@
 import java.util.*;
 import java.io.*;
 
-class Program327
+class Packer
 {
+    private static final byte XOR_KEY = 5; // Encryption key
+
     public static void main(String arg[]) throws Exception
     {
         System.out.println("------------------------------------------------");
-        System.out.println("---------- Marvellous Packer Unpacker ----------");
+        System.out.println("---------- JD Packer Unpacker ----------");
         System.out.println("------------------------------------------------");
 
         Scanner sobj = new Scanner(System.in);
@@ -27,7 +29,7 @@ class Program327
             return;
         }
 
-        System.out.println("Packed file gets succesfully created in current directory.");
+        System.out.println("Packed file gets successfully created in current directory.");
 
         File fobj = new File(DirectoryName);
 
@@ -35,7 +37,7 @@ class Program327
         if(bret == true)
         {
             File Arr[] = fobj.listFiles();
-            System.out.println("Number of files in the directory are : "+Arr.length);
+            System.out.println("Number of files in the directory are : " + Arr.length);
 
             String Header = null;
 
@@ -47,14 +49,14 @@ class Program327
             System.out.println("Packing activity started...");
 
             // Travel Directory
-            for(int i = 0; i < Arr.length; i++)
+            for (int i = 0; i < Arr.length; i++)
             {
                 // Create header
                 Header = Arr[i].getName() + " " + Arr[i].length();
-                System.out.println("File packed with the name : "+Arr[i].getName());
+                System.out.println("File packed with the name : " + Arr[i].getName());
 
                 // Add extra white spaces at the end of header
-                for(int j = Header.length(); j < 100; j++)
+                for (int j = Header.length(); j < 100; j++)
                 {
                     Header = Header + " ";
                 }
@@ -63,27 +65,32 @@ class Program327
                 byte hArr[] = Header.getBytes();
 
                 // Write header into packed file
-                fcombine.write(hArr,0,100);
+                fcombine.write(hArr, 0, 100);
 
-                // To read the file from duirectory
+                // To read the file from directory
                 FileInputStream fiobj = new FileInputStream(Arr[i]);
 
-                // write the data into packed file after header
-                while((iRet = fiobj.read(Buffer)) != -1 )
+                // Write the data into packed file after header with encryption
+                while ((iRet = fiobj.read(Buffer)) != -1)
                 {
-                    fcombine.write(Buffer,0,iRet);
+                    // XOR encryption
+                    for (int k = 0; k < iRet; k++)
+                    {
+                        Buffer[k] ^= XOR_KEY;
+                    }
+                    fcombine.write(Buffer, 0, iRet);
                 }
                 fiobj.close();
             }
 
-            System.out.println("Packing activity completed..");
-            System.out.println("Total file packed succesfully : "+Arr.length);
+            System.out.println("Packing activity completed.");
+            System.out.println("Total files packed successfully: " + Arr.length);
 
             System.out.println("------------------------------------------------");
-            System.out.println("Thank you for using Marvellous Packer Unpacker");
+            System.out.println("Thank you for using JD Packer Unpacker");
             System.out.println("------------------------------------------------");
         }
-        else 
+        else
         {
             System.out.println("There is no such directory");
         }
