@@ -1,4 +1,4 @@
-Project Name : File Packer Unpacker with encryption
+Project Name : Secure File Packer and Unpacker
   
   Technology: Java Programming
     
